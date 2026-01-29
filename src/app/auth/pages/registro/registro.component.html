@@ -1,0 +1,194 @@
+<!-- <div class="registro-container">
+  <div class="registro-card">
+    <h2>Registro de Usuario</h2>
+    
+    <form [formGroup]="registroForm" (ngSubmit)="registro()">
+      
+   
+      <div class="form-group">
+        <label for="nombres">Nombres Completos</label>
+        <input 
+          type="text" 
+          id="nombres"
+          formControlName="nombres"
+          placeholder="Ej: Juan Pérez"
+          class="form-control"
+          [class.is-invalid]="nombresInvalido"
+        >
+        <small class="text-danger" *ngIf="nombresInvalido">
+          El nombre debe tener al menos 3 caracteres
+        </small>
+      </div>
+
+        <div class="form-group">
+        <label for="nombres">Apellidos Completos</label>
+        <input 
+          type="text" 
+          id="nombres"
+          formControlName="nombres"
+          placeholder="Ej: Juan Pérez"
+          class="form-control"
+          [class.is-invalid]="nombresInvalido"
+        >
+        <small class="text-danger" *ngIf="nombresInvalido">
+          El nombre debe tener al menos 3 caracteres
+        </small>
+      </div>
+
+    
+      <div class="form-group">
+        <label for="correo">Correo Electrónico</label>
+        <input 
+          type="email" 
+          id="correo"
+          formControlName="correo"
+          placeholder="ejemplo@correo.com"
+          class="form-control"
+          [class.is-invalid]="correoInvalido"
+        >
+        <small class="text-danger" *ngIf="correoInvalido">
+          Ingrese un correo válido
+        </small>
+      </div>
+
+      
+      <div class="form-group">
+        <label for="nroCelular">Número de Celular</label>
+        <input 
+          type="text" 
+          id="nroCelular"
+          formControlName="nroCelular"
+          placeholder="995252538"
+          class="form-control"
+          [class.is-invalid]="nroCelularInvalido"
+        >
+        <small class="text-danger" *ngIf="nroCelularInvalido">
+          El número de celular debe tener 9 dígitos
+        </small>
+      </div>
+
+     
+      <div class="form-group">
+        <label for="clave">Contraseña</label>
+        <input 
+          type="password" 
+          id="clave"
+          formControlName="clave"
+          placeholder="Mínimo 6 caracteres"
+          class="form-control"
+          [class.is-invalid]="claveInvalida"
+        >
+        <small class="text-danger" *ngIf="claveInvalida">
+          La contraseña debe tener al menos 6 caracteres
+        </small>
+      </div>
+
+    
+      <div class="form-group">
+        <label for="confirmarClave">Confirmar Contraseña</label>
+        <input 
+          type="password" 
+          id="confirmarClave"
+          formControlName="confirmarClave"
+          placeholder="Repita su contraseña"
+          class="form-control"
+          [class.is-invalid]="confirmarClaveInvalida"
+        >
+        <small class="text-danger" *ngIf="confirmarClaveInvalida">
+          Las contraseñas no coinciden
+        </small>
+      </div>
+
+     
+      <div class="alert alert-success" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+
+      
+      <div class="alert alert-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      
+      <button 
+        type="submit" 
+        class="btn-registro"
+        [disabled]="isLoading"
+      >
+        <span *ngIf="!isLoading">Registrarse</span>
+        <span *ngIf="isLoading">Procesando...</span>
+      </button>
+
+      
+      <div class="login-link">
+        <p>¿Ya tienes cuenta? <a (click)="volverLogin()">Inicia sesión aquí</a></p>
+      </div>
+
+    </form>
+  </div>
+</div> -->
+
+
+
+
+
+<div class="registro-container">
+  <div class="registro-card">
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="left">
+      <img src="assets/images/panko-log.png" class="logo">
+
+      <h2>{{ titulo }}</h2>
+      <p>{{ subtitulo }}</p>
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div class="right">
+      <form [formGroup]="registroForm">
+
+        <!-- PASO 1 -->
+        <ng-container *ngIf="step === 1">
+          <div class="row">
+            <input type="text" placeholder="Nombres" formControlName="nombres">
+            <input type="text" placeholder="apellidos" formControlName="apellidos">
+          </div>
+
+          <button type="button" (click)="nextStep()">Siguiente</button>
+        </ng-container>
+
+        <!-- PASO 2 -->
+        <ng-container *ngIf="step === 2">
+          <input type="email" placeholder="Correo electrónico" formControlName="correo">
+          <input type="text" placeholder="Número de celular" formControlName="nroCelular">
+
+          <div class="buttons">
+            <button type="button" class="link" (click)="prevStep()">Atrás</button>
+            <button type="button" (click)="nextStep()">Siguiente</button>
+          </div>
+        </ng-container>
+
+        <!-- PASO 3 -->
+        <ng-container *ngIf="step === 3">
+          <input type="password" placeholder="Contraseña" formControlName="clave">
+          <input type="password" placeholder="Confirmar contraseña" formControlName="confirmarClave">
+
+          <div class="buttons">
+            <button type="button" class="link" (click)="prevStep()">Atrás</button>
+            <button type="button" (click)="registrar()" [disabled]="isLoading">
+              {{ isLoading ? 'Creando cuenta...' : 'Crear cuenta' }}
+            </button>
+          </div>
+        </ng-container>
+
+      </form>
+    </div>
+
+    <div class="login-link">
+      <p>¿Ya tienes cuenta?
+        <a (click)="volverLogin()">Inicia sesión aquí</a>
+      </p>
+    </div>
+
+  </div>
+</div>

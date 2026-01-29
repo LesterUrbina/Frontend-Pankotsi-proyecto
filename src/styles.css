@@ -1,1 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+  margin: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tema oscuro */
+body.dark-theme {
+  background-color: #303030;
+  color: #ffffff;
+}
+
+/* Ajustes adicionales para dark mode */
+.dark-theme .login-container,
+.dark-theme .registro-container {
+  background-color: #424242;
+}
+
+.dark-theme .login-card,
+.dark-theme .registro-card {
+  background-color: #303030;
+  color: #ffffff;
+}
+
+.dark-theme h2 {
+  color: #ffffff;
+}
+
+.dark-theme label {
+  color: #e0e0e0;
+}
