@@ -16,6 +16,7 @@ const routes: Routes = [
    {
     path: 'dashboard-superAdmin',
     canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
     data: {roles: [ROLES.SUPER_ADMIN]},
     loadChildren:() => import('./modules/superadmin/dashboardSuperAdmin/dashboard-super-admin.module').then(m => m.DashboardSuperAdminModule )
   },
@@ -26,8 +27,8 @@ const routes: Routes = [
 
    {
     path: 'dashboard-admin',
-   
     canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
     data: {roles: [ROLES.ADMIN]},
     loadChildren:() => import('./modules/admin/dashboardAdmin/dashboard-admin.module').then(m => m.DashboardAdminModule )
   },
@@ -38,6 +39,7 @@ const routes: Routes = [
   {
     path: 'dashboard-user',
     canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
     data: {roles: [ROLES.USER]},
     loadChildren:() => import('./modules/user/dashboardUser/dashboard-user.module').then(m => m.DashboardUserModule )
   },

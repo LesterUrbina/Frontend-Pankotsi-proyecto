@@ -7,69 +7,67 @@ import { RoleRouteKey } from 'src/app/core/models/roles';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanLoad {
 
   constructor(private authService: AuthService,
     private router: Router
   ) { }
 
- canActivate(
+  canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | UrlTree {
 
-    // 1️⃣ No autenticado
+    //  No autenticado
     if (!this.authService.isAuthenticated()) {
-      return this.router.createUrlTree(['/auth/login'],{ queryParams: { returnUrl: state.url } }
+      return this.router.createUrlTree(['/auth/login'], { queryParams: { returnUrl: state.url } }
       );
     }
 
-    // 2️⃣ Autenticado pero sin rol permitido
+    //  Autenticado pero SIN ROLES (estado inválido)
+    if (this.authService.roles.length === 0) {
+      this.authService.logout();
+      return this.router.createUrlTree(['/auth/login']);
+    }
+
+    //  Autenticado pero SIN PERMISO para la ruta
     const rolesPermitidos = route.data?.['roles'] as RoleRouteKey[] | undefined;
 
     if (rolesPermitidos && !this.authService.hasAnyRole(rolesPermitidos)) {
-      return this.router.createUrlTree([this.authService.getDefaultRouteByRole()]);
+      return this.router.createUrlTree([
+        this.authService.getDefaultRouteByRole()
+      ]);
     }
-
-    // 3️⃣ Autorizado
-    return true;
+     return true;
   }
 
 
-
-
-
-  //  Autenticado pero sin rol permitido
   
+  canLoad(
+    route: Route,
+    segments: UrlSegment[]
+  ): boolean {
 
-  //  canActivate(route: ActivatedRouteSnapshot,
-  //              state : RouterStateSnapshot ): boolean | UrlTree{
-  //   return this.checkAccess(route.data?.['roles']);
-  // }
+    // 1️⃣ No autenticado → no cargar módulo
+    if (!this.authService.isAuthenticated()) {
+      return false;
+    }
 
+    // 2️⃣ Autenticado pero sin roles → estado inválido
+    if (this.authService.roles.length === 0) {
+      this.authService.logout();
+      return false;
+    }
 
-  // canLoad(route: Route): boolean | UrlTree{
-  //   return this.checkAccess(route.data?.['roles']);
-  // }
+    // 3️⃣ Validación de roles del módulo
+    const rolesPermitidos = route.data?.['roles'] as RoleRouteKey[] | undefined;
 
+    if (rolesPermitidos && !this.authService.hasAnyRole(rolesPermitidos)) {
+      return false;
+    }
 
-  // private checkAccess(rolesPermitidos?: string[]): boolean | UrlTree {
+    return true;
+  }
 
-
-  //   if (!this.authService.isAuthenticated()) {
-  //     return this.router.createUrlTree(['/auth/login'])
-  //   }
-
-  //   if (rolesPermitidos && !this.authService.hasAnyRole(rolesPermitidos)) {
-
-  //     return this.router.createUrlTree([
-  //       this.authService.getDefaultRouteByRole()
-  //     ])
-  //   }
-
-
-  //   return true;
-  // }
- 
 }
 

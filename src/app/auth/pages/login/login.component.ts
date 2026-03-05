@@ -47,6 +47,10 @@ export class LoginComponent implements OnDestroy {
     //  clave     : ['123456', [ Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
 
 
+    //PROBANDO
+    //     nroCelular: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    // clave: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+
   });
 
 
@@ -64,12 +68,13 @@ export class LoginComponent implements OnDestroy {
       .subscribe({
         next: () => {
 
-          const url = this.authService.getDefaultRouteByRole();
-          this.router.navigateByUrl(url);
+        this.router.navigateByUrl(this.authService.getDefaultRouteByRole());
         
         },
-        error: (messageERROR) => {
-          console.log("QUE PASO :", messageERROR);
+        error: (mensaje: string) => {
+          this.errorMessage = mensaje;
+          console.log("QUE ESTO :",mensaje);
+          
         }      
       });
   }
