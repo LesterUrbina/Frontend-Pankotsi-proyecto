@@ -70,9 +70,21 @@ export class AuthService {
         map(resp => {
 
           //validamos que rol recibido exista en el RoleRouteKey, 
-          const user ={...resp.data, roles: resp.data.roles.filter(
-            (r): r is RoleRouteKey => r in ROLE_ROUTES)
-          }
+          const validRoles = resp.data.roles.filter(
+           (r): r is RoleRouteKey => r in ROLE_ROUTES
+           );
+
+          // ❌ Ningún rol reconocido por el frontend
+         if (validRoles.length === 0) {
+           throw new Error(
+             'El usuario no tiene roles soportados por la aplicación'
+           );
+         }
+
+         const user: UsuarioAuth ={
+          ...resp.data, roles: validRoles
+         }
+
 
           //persistencia en el localStorage
           this.setAuthFromLocalStorage(user);
@@ -85,7 +97,8 @@ export class AuthService {
           // Ahora retornamos el usuario para que el componente decida navegación
           return user;
         }),
-        catchError(err => throwError(() => err.error?.descripcion || 'Error de autenticación')),
+         //catchError(err => throwError(() => err.error?.descripcion || 'Error de autenticación')),
+        catchError(err => throwError(() => err)),
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
@@ -105,36 +118,6 @@ export class AuthService {
   }
 
   //VALIDACION AUTENTICATION
-
-  // isValidAuth(): boolean {
-
-    // const auth = this.currentUserValue;
-    // if (!auth) return false;
-
-    // const { token, expiracionToken, roles } = auth;
-
-    // if (!token) return false;
-
-    //   if (roles.includes('ROLE_ADMIN') || roles.includes('ROLE_USER') || roles.includes('ROLE_SUPER_ADMIN')) {
-
-      
-    //   if (DateUtil.now() > DateUtil.parseISO(expiracionToken)) {
-    //     return false;
-    //   }
-
-    //   return true;
-    // }
-
-    // return false;
-
-     // Autenticación básica (token + expiración)
-    //if(!this.isAuthenticated()){return false}
-
-    //autorizacion por roles
-    //return this.hasAnyRole([ROLES.ADMIN,ROLES.SUPER_ADMIN, ROLES.USER]);
-
-  //}
-  
 
   //autenticacion
   isAuthenticated(): boolean{
